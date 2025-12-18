@@ -1,0 +1,31 @@
+# Source files
+src/
+tests/
+examples/
+docs/
+
+# Config files
+.gitignore
+.eslintrc.js
+.prettierrc.js
+tsconfig.json
+rollup.config.js
+jest.config.js
+
+# Development files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+.vscode/
+.idea/
+
+# Documentation
+CONTRIBUTING.md
+.github/
+
+# Misc
+coverage/
+.nyc_output/
+*.log
+

@@ -1,0 +1,589 @@
+/**
+ * 🎨 Enhanced Table Resize Styles
+ * 
+ * 设计原则：
+ * - 清晰的视觉层次
+ * - 直观的交互反馈
+ * - 流畅的动画过渡
+ * - 优秀的性能表现
+ */
+
+// ==================== 配色变量 ====================
+@primary-color: #1890ff;
+@border-color: #d9d9d9;
+@hover-color: #40a9ff;
+@active-color: #096dd9;
+@disabled-color: #d9d9d9;
+@bg-hover: #f5f5f5;
+@text-color: #262626;
+@text-secondary: #8c8c8c;
+
+// ==================== 列宽拖动句柄样式 ====================
+
+.react-resizable-handle {
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+  z-index: 10;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  
+  // 性能优化
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+
+  // 视觉反馈：添加细微的分隔线
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 60%;
+    background-color: transparent;
+    border-radius: 2px;
+    transition: background-color 0.2s ease, height 0.2s ease;
+  }
+
+  // 悬停态：高亮显示
+  &:hover {
+    &::before {
+      background-color: @primary-color;
+      height: 80%;
+    }
+  }
+
+  // 拖动态：更强的视觉反馈
+  &.resizing {
+    &::before {
+      background-color: @active-color;
+      height: 100%;
+      width: 3px;
+      box-shadow: 0 0 8px rgba(24, 144, 255, 0.5);
+    }
+  }
+
+  // 添加可访问性提示
+  &:focus-visible {
+    outline: 2px solid @primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// ==================== Resizable 容器样式 ====================
+
+.react-resizable {
+  position: relative;
+  transition: box-shadow 0.2s ease;
+  
+  // 性能优化
+  will-change: width;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+// ==================== 表格优化样式 ====================
+
+.ant-table {
+  // 表头样式增强
+  .ant-table-thead > tr > th {
+    position: relative;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    
+    // 性能优化
+    backface-visibility: hidden;
+
+    // 拖动时高亮当前列
+    &.resizing-column {
+      background-color: @bg-hover;
+      box-shadow: inset 0 0 0 2px @primary-color;
+      z-index: 2;
+    }
+  }
+
+  // 表体单元格优化
+  .ant-table-tbody > tr > td {
+    backface-visibility: hidden;
+    transition: background-color 0.2s ease;
+
+    // 当启用单元格调整时，移除默认 padding
+    &.resizable-cell {
+      padding: 0 !important;
+    }
+
+    // 非调整模式保持默认样式
+    &:not(.resizable-cell) {
+      padding: 8px 16px;
+    }
+  }
+
+  // 优化拖动时的表格性能
+  &.resizing-table {
+    user-select: none;
+    
+    * {
+      cursor: col-resize !important;
+    }
+  }
+}
+
+// ==================== 可调整大小的单元格内容 ====================
+
+.resizable-cell-content {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  resize: both;
+  overflow: auto;
+  
+  // 性能优化
+  will-change: width, height;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  
+  // 🔥 关键：禁用 height 的过渡，避免与 CSS resize 冲突
+    transition: box-shadow 0.2s ease, width 0s, height 0s;
+
+  // 悬停态 - 更微妙的视觉反馈
+  &:hover {
+    // 使用更柔和的边框提示
+    box-shadow: inset 0 0 0 1px rgba(24, 144, 255, 0.08);
+
+    &::after {
+      opacity: 0.65; // 悬停时适度显示，不要太强烈
+    }
+    
+    // 悬停时显示拖动提示
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  // 获得焦点时
+  &:focus-within {
+    box-shadow: inset 0 0 0 1px rgba(24, 144, 255, 0.3);
+  }
+
+  // ==================== 自定义滚动条 ====================
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+    margin: 2px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    
+    &:hover {
+      background: #a0a0a0;
+    }
+
+    &:active {
+      background: #808080;
+    }
+  }
+
+  // Firefox 滚动条样式
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+
+  // ==================== 拖动手柄提示（精致版）====================
+  
+  // 手柄主体 - 使用点阵图案，更精致优雅
+  &::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 12px;
+    height: 12px;
+    cursor: nwse-resize;
+    pointer-events: none;
+    opacity: 0; // 默认完全隐藏，更低调
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 0 3px 0;
+    
+    // 使用精致的点阵图案（6个圆点）
+    background-image: 
+      radial-gradient(circle at 2px 10px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 6px 10px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 10px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 6px 6px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 6px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 2px, rgba(0, 0, 0, 0.25) 0.8px, transparent 0.8px);
+    background-repeat: no-repeat;
+  }
+  
+  // 拖动区域提示 - 更大的可拖动区域
+  &::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    height: 20px;
+    cursor: nwse-resize;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    // 使用渐变创建柔和的角标提示
+    background: 
+      linear-gradient(
+        -45deg,
+        rgba(24, 144, 255, 0.03) 0%,
+        rgba(24, 144, 255, 0.08) 50%,
+        transparent 50%
+      );
+    border-radius: 0 0 4px 0;
+  }
+}
+
+// ==================== 单元格拖动状态增强 ====================
+
+// 拖动中的单元格 - 更强的视觉反馈
+.resizable-cell-content:active {
+  box-shadow: 
+    inset 0 0 0 1px rgba(24, 144, 255, 0.4),
+    0 2px 8px rgba(24, 144, 255, 0.15);
+  
+  &::after {
+    opacity: 0.9 !important;
+    // 拖动时使用品牌色
+    background-image: 
+      radial-gradient(circle at 2px 10px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 6px 10px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 10px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 6px 6px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 6px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px),
+      radial-gradient(circle at 10px 2px, rgba(24, 144, 255, 0.6) 0.8px, transparent 0.8px);
+  }
+}
+
+// ==================== 样式变体：简约风格 ====================
+
+.table-resize-minimal {
+  .resizable-cell-content {
+    // 只在悬停时显示极简的提示
+    &:hover {
+      box-shadow: none;
+      
+      &::after {
+        opacity: 0.35; // 更低调
+      }
+      
+      &::before {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// ==================== 样式变体：经典风格 ====================
+
+.table-resize-classic {
+  .resizable-cell-content::after {
+    // 使用经典的三条斜线设计
+    background-image: 
+      linear-gradient(135deg, 
+        transparent 0%, 
+        transparent 45%, 
+        rgba(0, 0, 0, 0.2) 45%, 
+        rgba(0, 0, 0, 0.2) 47%, 
+        transparent 47%, 
+        transparent 52%, 
+        rgba(0, 0, 0, 0.2) 52%, 
+        rgba(0, 0, 0, 0.2) 54%, 
+        transparent 54%, 
+        transparent 59%,
+        rgba(0, 0, 0, 0.2) 59%,
+        rgba(0, 0, 0, 0.2) 61%,
+        transparent 61%,
+        transparent 100%
+      );
+    opacity: 0.15; // 默认更浅
+  }
+}
+
+// ==================== 样式变体：现代风格（图标式）====================
+
+.table-resize-modern {
+  .resizable-cell-content {
+    &::after {
+      // 使用现代的图标式设计
+      width: 16px;
+      height: 16px;
+      right: 4px;
+      bottom: 4px;
+      background-image: 
+        radial-gradient(circle at 3px 13px, rgba(24, 144, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 8px 13px, rgba(24, 144, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 13px, rgba(24, 144, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 8px 8px, rgba(24, 144, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 8px, rgba(24, 144, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 3px, rgba(24, 144, 255, 0.3) 1px, transparent 1px);
+      opacity: 0.4;
+    }
+    
+    &:hover::after {
+      opacity: 1;
+      background-image: 
+        radial-gradient(circle at 3px 13px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 8px 13px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 13px 13px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 8px 8px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 13px 8px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 13px 3px, rgba(24, 144, 255, 0.7) 1.2px, transparent 1.2px);
+    }
+  }
+}
+
+// ==================== 拖动宽度提示气泡 ====================
+
+.resize-width-tooltip {
+  position: fixed;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  
+  // 动画效果
+  animation: tooltip-fade-in 0.15s ease-out;
+
+  // 添加小箭头
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(0, 0, 0, 0.85);
+  }
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -120%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -120%) scale(1);
+  }
+}
+
+// ==================== 响应式设计 ====================
+
+// 移动端优化
+@media (max-width: 768px) {
+  .react-resizable-handle {
+    width: 14px; // 增大触摸区域
+    
+    &::before {
+      width: 3px; // 更粗的视觉提示
+    }
+  }
+
+  .resizable-cell-content {
+    // 移动端默认显示拖动手柄，因为没有悬停状态
+    &::after {
+      width: 16px;
+      height: 16px;
+      opacity: 0.25; // 移动端默认显示但保持低调
+      // 使用稍大的点
+      background-image: 
+        radial-gradient(circle at 3px 13px, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 8px 13px, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 13px, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 8px 8px, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 8px, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 13px 3px, rgba(0, 0, 0, 0.3) 1px, transparent 1px);
+    }
+    
+    &::before {
+      width: 24px;
+      height: 24px;
+      opacity: 0.4; // 移动端增加可触摸区域提示
+    }
+  }
+}
+
+// 平板优化
+@media (min-width: 769px) and (max-width: 1024px) {
+  .react-resizable-handle {
+    width: 12px;
+  }
+}
+
+// ==================== 暗色主题支持 ====================
+
+@media (prefers-color-scheme: dark) {
+  .resize-width-tooltip {
+    background: rgba(255, 255, 255, 0.95);
+    color: #262626;
+
+    &::after {
+      border-top-color: rgba(255, 255, 255, 0.95);
+    }
+  }
+
+  .resizable-cell-content {
+    // 暗色模式下的滚动条
+    &::-webkit-scrollbar-track {
+      background: #2a2a2a;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #555;
+      
+      &:hover {
+        background: #777;
+      }
+    }
+    
+    // 暗色模式下的拖动手柄 - 使用浅色
+    &::after {
+      background-image: 
+        radial-gradient(circle at 2px 10px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+        radial-gradient(circle at 6px 10px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+        radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+        radial-gradient(circle at 6px 6px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+        radial-gradient(circle at 10px 6px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+        radial-gradient(circle at 10px 2px, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px);
+    }
+    
+    &:hover {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      
+      &::before {
+        background: 
+          linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 50%
+          );
+      }
+    }
+    
+    &:active {
+      box-shadow: 
+        inset 0 0 0 1px rgba(64, 169, 255, 0.5),
+        0 2px 8px rgba(64, 169, 255, 0.2);
+    }
+  }
+}
+
+// ==================== 打印样式 ====================
+
+@media print {
+  .react-resizable-handle {
+    display: none !important;
+  }
+
+  .resizable-cell-content {
+    resize: none !important;
+    overflow: visible !important;
+    
+    &::after {
+      display: none !important;
+    }
+  }
+}
+
+// ==================== 无障碍优化 ====================
+
+// 高对比度模式
+@media (prefers-contrast: high) {
+  .react-resizable-handle {
+    &::before {
+      background-color: currentColor;
+      width: 3px;
+    }
+
+    &:hover::before {
+      background-color: @primary-color;
+    }
+  }
+
+  .resizable-cell-content {
+    &:hover {
+      outline: 2px solid @primary-color;
+    }
+  }
+}
+
+// 减少动画（用户偏好）
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ==================== 工具类 ====================
+
+// 禁用调整大小
+.resize-disabled {
+  .react-resizable-handle {
+    cursor: not-allowed !important;
+    opacity: 0.4;
+    
+    &::before {
+      background-color: @disabled-color !important;
+    }
+  }
+
+  .resizable-cell-content {
+    resize: none !important;
+    
+    &::after {
+      display: none !important;
+    }
+  }
+}
+
+// 紧凑模式
+.table-compact {
+  .resizable-cell-content {
+    padding: 4px 8px;
+  }
+}
+
+// 宽松模式
+.table-comfortable {
+  .resizable-cell-content {
+    padding: 12px 24px;
+  }
+}
