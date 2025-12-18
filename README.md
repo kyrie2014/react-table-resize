@@ -238,13 +238,3 @@ MIT © [Your Name]
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
-## 🐛 Bug Reports
-
-Found a bug? Please [open an issue](https://github.com/yourusername/react-table-resize/issues).
-
-## 💬 Support
-
-- 📧 Email: your.email@example.com
-- 💬 Discord: [Join our community](https://discord.gg/your-invite)
-- 📖 Docs: [Full documentation](https://yourusername.github.io/react-table-resize)
-
