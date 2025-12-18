@@ -92,20 +92,20 @@ react-table-resize/
 
 **`package.json`** (第 42, 46行)
 ```json
-"author": "Your Name <your.email@example.com>",
+"author": "Kyrie liu <kyrie.liu@gmail.com>",
 "repository": {
-  "url": "https://github.com/yourusername/react-table-resize.git"
+  "url": "https://github.com/kyrie2014/react-table-resize.git"
 }
 ```
 
 **`LICENSE`** (第 3行)
 ```
-Copyright (c) 2024 [Your Name]
+Copyright (c) 2024 Kyrie liu
 ```
 
 **`README.md`**
-- 搜索替换: `yourusername` → 你的GitHub用户名
-- 搜索替换: `your.email@example.com` → 你的邮箱
+- 已更新为: `kyrie2014`
+- 已更新为: `kyrie.liu@gmail.com`
 
 #### 2️⃣ 本地测试
 ```bash
@@ -129,7 +129,7 @@ dir dist\
 # 在GitHub创建新仓库 react-table-resize
 
 # 添加远程仓库
-git remote add origin https://github.com/yourusername/react-table-resize.git
+git remote add origin https://github.com/kyrie2014/react-table-resize.git
 
 # 推送代码
 git push -u origin main

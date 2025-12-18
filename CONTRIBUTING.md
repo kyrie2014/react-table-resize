@@ -43,7 +43,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 
 ```bash
 # Clone your fork
-git clone https://github.com/yourusername/react-table-resize.git
+git clone https://github.com/kyrie2014/react-table-resize.git
 cd react-table-resize
 
 # Install dependencies

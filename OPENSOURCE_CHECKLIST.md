@@ -76,24 +76,24 @@ react-table-resize/
 **package.json:**
 ```json
 {
-  "name": "react-table-resize", // 或你的包名
-  "author": "Your Name <your.email@example.com>",
+  "name": "react-table-resize",
+  "author": "Kyrie liu <kyrie.liu@gmail.com>",
   "repository": {
-    "url": "https://github.com/yourusername/react-table-resize.git"
+    "url": "https://github.com/kyrie2014/react-table-resize.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/react-table-resize/issues"
+    "url": "https://github.com/kyrie2014/react-table-resize/issues"
   },
-  "homepage": "https://github.com/yourusername/react-table-resize#readme"
+  "homepage": "https://github.com/kyrie2014/react-table-resize#readme"
 }
 ```
 
 **LICENSE:**
-- 替换 `[Your Name]` 为你的真实姓名
+- 已更新为 `Kyrie liu`
 
 **README.md:**
-- 替换所有 `yourusername` 为你的 GitHub 用户名
-- 替换 `your.email@example.com` 为你的邮箱
+- 已更新为 `kyrie2014`
+- 已更新为 `kyrie.liu@gmail.com`
 - 更新徽章链接
 
 ### 3. 代码质量检查 🔍
@@ -152,7 +152,7 @@ git add .
 git commit -m "Initial commit"
 
 # 在 GitHub 创建仓库后
-git remote add origin https://github.com/yourusername/react-table-resize.git
+git remote add origin https://github.com/kyrie2014/react-table-resize.git
 git branch -M main
 git push -u origin main
 ```

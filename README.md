@@ -226,7 +226,7 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 
 ## 📝 License
 
-MIT © [Your Name]
+MIT © Kyrie Liu
 
 ## 🙏 Acknowledgments
 

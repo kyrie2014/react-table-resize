@@ -30,20 +30,20 @@ react-table-resize/
 1. **`package.json`**
    ```json
    {
-     "name": "react-table-resize",  // 或你想要的包名
-     "author": "Your Name <your.email@example.com>",
+     "name": "react-table-resize",
+     "author": "Kyrie liu <kyrie.liu@gmail.com>",
      "repository": {
-       "url": "https://github.com/yourusername/react-table-resize.git"
+       "url": "https://github.com/kyrie2014/react-table-resize.git"
      }
    }
    ```
 
 2. **`LICENSE`**
-   - 替换 `[Your Name]` 为你的真实姓名
+   - 已更新为 `Kyrie liu`
 
 3. **`README.md`**
-   - 搜索并替换所有 `yourusername` → 你的 GitHub 用户名
-   - 搜索并替换所有 `your.email@example.com` → 你的邮箱
+   - 已更新为 `kyrie2014`
+   - 已更新为 `kyrie.liu@gmail.com`
 
 ### 第2步：安装依赖并测试
 
@@ -78,7 +78,7 @@ npm publish
 ```bash
 # 在 GitHub 创建新仓库
 # 然后执行：
-git remote add origin https://github.com/yourusername/react-table-resize.git
+git remote add origin https://github.com/kyrie2014/react-table-resize.git
 git push -u origin main
 
 # 创建 Release 会自动触发 npm 发布（需要配置 NPM_TOKEN）
